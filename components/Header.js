@@ -56,7 +56,6 @@ export const Header = () => {
                 suffix={suffix}
               />
             </Input.Group>
-            <Space>
             <Link href="/category">
               <Typography.Title
                 level={5}
