@@ -56,6 +56,19 @@ export const Header = () => {
                 suffix={suffix}
               />
             </Input.Group>
+            <Space>
+            <Link href="/category">
+              <Typography.Title
+                level={5}
+                style={{
+                  cursor: "pointer",
+                  color: "white",
+                  marginBottom: 0,
+                }}
+              >
+                업종별 회사
+              </Typography.Title>
+            </Link>
           </Space>
         }
       />

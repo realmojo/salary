@@ -319,6 +319,7 @@ export const CompanyPage = ({ item }) => {
           <Table
             bordered
             style={{ marginBottom: 20 }}
+            size="small"
             dataSource={newInfo}
             columns={columns}
             rowKey="index"
