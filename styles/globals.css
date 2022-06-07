@@ -8,10 +8,6 @@
   margin: 0 auto !important;
 }
 
-.ant-page-header-heading-left {
-  padding-left: 18px;
-}
-
 @media (max-width: 1024px) {
   .ant-page-header-heading,
   .container-wrap {

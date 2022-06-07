@@ -1,71 +1,252 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import Head from "next/head";
 import axios from "axios";
-import moment from "moment";
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Divider,
-  Table,
-  List,
-  Tag,
-  Typography,
-} from "antd";
-const { Title, Paragraph } = Typography;
-
+import { Table, List, Typography } from "antd";
+import { Line, Column } from "@ant-design/plots";
 import { Header } from "../../../components/Header";
 
-// import { getTitle } from "../../utils";
 function addComma(num) {
   var regexp = /\B(?=(\d{3})+(?!\d))/g;
   return num.toString().replace(regexp, ",");
 }
 
+const MoveEmployerColumnChart = ({ data }) => {
+  if (data) {
+    const join = data.map((item) => {
+      return {
+        name: "입사자",
+        year: `${item.year}/${item.month}`,
+        value: item.joinEmployer,
+      };
+    });
+    const leave = data.map((item) => {
+      return {
+        name: "퇴사자",
+        year: `${item.year}/${item.month}`,
+        value: item.leaveEmployer,
+      };
+    });
+    const d = join.concat(leave);
+    const config = {
+      data: d,
+      isGroup: true,
+      xField: "year",
+      yField: "value",
+      seriesField: "name",
+
+      marginRatio: 0.1,
+      label: {
+        position: "middle",
+        layout: [
+          {
+            type: "interval-adjust-position",
+          },
+          {
+            type: "interval-hide-overlap",
+          },
+          {
+            type: "adjust-color",
+          },
+        ],
+      },
+    };
+    return <Column {...config} />;
+  }
+};
+
+const TotalLineChart = ({ data }) => {
+  if (data) {
+    const t = data.map((item) => {
+      return {
+        year: `${item.year}/${item.month}`,
+        value: item.totalEmployer,
+      };
+    });
+    const config = {
+      data: t,
+      xField: "year",
+      yField: "value",
+      label: {},
+      point: {
+        size: 3,
+        shape: "circle",
+        style: {
+          fill: "white",
+          stroke: "#5B8FF9",
+          lineWidth: 2,
+        },
+      },
+      tooltip: {
+        formatter: (d) => {
+          return { name: "직원 수", value: d.value + "명" };
+        },
+        showMarkers: true,
+      },
+      state: {
+        active: {
+          style: {
+            shadowBlur: 4,
+            stroke: "#000",
+            fill: "red",
+          },
+        },
+      },
+      interactions: [
+        {
+          type: "marker-active",
+        },
+      ],
+    };
+    return <Line {...config} />;
+  }
+};
+
+const SalaryMonthLineChart = ({ data }) => {
+  if (data) {
+    const t = data.map((item) => {
+      return {
+        year: `${item.year}/${item.month}`,
+        value: item.monthSalary,
+      };
+    });
+    const config = {
+      data: t,
+      xField: "year",
+      yField: "value",
+      label: {},
+      point: {
+        size: 3,
+        shape: "circle",
+        style: {
+          fill: "white",
+          stroke: "#5B8FF9",
+          lineWidth: 2,
+        },
+      },
+      tooltip: {
+        formatter: (d) => {
+          return { name: "월급", value: addComma(d.value) + "원" };
+        },
+        showMarkers: true,
+      },
+      state: {
+        active: {
+          style: {
+            shadowBlur: 4,
+            stroke: "#000",
+            fill: "red",
+          },
+        },
+      },
+      interactions: [
+        {
+          type: "marker-active",
+        },
+      ],
+    };
+    return <Line {...config} />;
+  }
+};
+
+const SalaryYearLineChart = ({ data }) => {
+  if (data) {
+    const t = data.map((item) => {
+      return {
+        year: `${item.year}/${item.month}`,
+        value: item.yearSalary,
+      };
+    });
+    const config = {
+      data: t,
+      xField: "year",
+      yField: "value",
+      label: {},
+      point: {
+        size: 3,
+        shape: "circle",
+        style: {
+          fill: "white",
+          stroke: "#5B8FF9",
+          lineWidth: 2,
+        },
+      },
+      tooltip: {
+        formatter: (d) => {
+          return { name: "월급", value: addComma(d.value) + "원" };
+        },
+        showMarkers: true,
+      },
+      state: {
+        active: {
+          style: {
+            shadowBlur: 4,
+            stroke: "#000",
+            fill: "red",
+          },
+        },
+      },
+      interactions: [
+        {
+          type: "marker-active",
+        },
+      ],
+    };
+    return <Line {...config} />;
+  }
+};
+
+const columns = [
+  { title: "연도", dataIndex: "year", key: "year" },
+  { title: "월", dataIndex: "month", key: "month" },
+  {
+    title: "월 평균 급여(예상)",
+    dataIndex: "monthSalary",
+    key: "monthSalary",
+    render: (value) => (
+      <div>
+        <strong>{addComma(value.toFixed(0))}</strong>
+      </div>
+    ),
+  },
+  {
+    title: "월 평균 연봉(예상)",
+    dataIndex: "yearSalary",
+    key: "yearSalary",
+    render: (value) => <div>{addComma(value.toFixed(0))}</div>,
+  },
+  {
+    title: "총 직원수",
+    dataIndex: "totalEmployer",
+    key: "totalEmployer",
+    render: (value) => <div>{addComma(value)}</div>,
+  },
+  {
+    title: "입사 직원수",
+    dataIndex: "joinEmployer",
+    key: "joinEmployer",
+    render: (value) => <div>{addComma(value)}</div>,
+  },
+  {
+    title: "퇴사 직원수",
+    dataIndex: "leaveEmployer",
+    key: "leaveEmployer",
+    render: (value) => <div>{addComma(value)}</div>,
+  },
+];
+
 export const CompanyPage = ({ item }) => {
-  // console.log(item);
   const { title, address, roadAddress, code, codeName, info } = item;
 
-  const columns = [
-    { title: "연도", dataIndex: "year", key: "year" },
-    { title: "월", dataIndex: "month", key: "month" },
-    {
-      title: "월 평균 급여(예상)",
-      dataIndex: "monthSalary",
-      key: "monthSalary",
-      render: (_, { monthSalary }) => (
-        <div>{addComma(monthSalary.toFixed(0))}</div>
-      ),
-    },
-    {
-      title: "월 평균 연봉(예상)",
-      dataIndex: "yearSalary",
-      key: "yearSalary",
-      render: (_, { yearSalary }) => (
-        <div>{addComma(yearSalary.toFixed(0))}</div>
-      ),
-    },
-    {
-      title: "총 직원수",
-      dataIndex: "totalEmployer",
-      key: "totalEmployer",
-      render: (_, { totalEmployer }) => <div>{addComma(totalEmployer)}</div>,
-    },
-    {
-      title: "입사 직원수",
-      dataIndex: "joinEmployer",
-      key: "joinEmployer",
-      render: (_, { joinEmployer }) => <div>{addComma(joinEmployer)}</div>,
-    },
-    {
-      title: "퇴사 직원수",
-      dataIndex: "leaveEmployer",
-      key: "leaveEmployer",
-      render: (_, { leaveEmployer }) => <div>{addComma(leaveEmployer)}</div>,
-    },
-  ];
+  const recentlyYear = info[info.length - 1].year;
+  const recentlyMonth = info[info.length - 1].month;
+  const recentlyYearSalary = addComma(info[info.length - 1].yearSalary);
+
+  const newInfo = info.map((item, index) => {
+    return {
+      index,
+      ...item,
+    };
+  });
 
   const schemaData = {
     "@context": "http://schema.org",
@@ -81,7 +262,10 @@ export const CompanyPage = ({ item }) => {
     <>
       <Head>
         <title>{title} 연봉정보 | 모두의 연봉</title>
-        <meta name="description" content={`${title} 연봉정보 | 모두의 연봉`} />
+        <meta
+          name="description"
+          content={`${recentlyYear}년 ${recentlyMonth}월 ${title} 연봉은 ${recentlyYearSalary}원 입니다. | 모두의 연봉. 내 연봉은 어디쯤 되는지 확인해보세요. 900,000개 이상의 연봉정보를 확인할 수 있습니다. 본 사이트는 국민연금 가입자 내역을 토대로 데이터를 제공합니다.`}
+        />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
@@ -89,14 +273,14 @@ export const CompanyPage = ({ item }) => {
         <meta property="og:title" />
         <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" />
-        <meta property="og:url" content="http://phonebookup.com" />
+        <meta property="og:url" content="http://salaryinfo.co.kr" />
         <meta
           property="og:image"
-          content="https://phonebookup.s3.ap-northeast-2.amazonaws.com/logo.png"
+          content="https://salaryinfo.s3.ap-northeast-2.amazonaws.com/logo.png"
         />
         <meta
           property="og:description"
-          content={`${title} 연봉정보 | 모두의 연봉`}
+          content={`${recentlyYear}년 ${recentlyMonth}월 ${title} 연봉은 ${recentlyYearSalary}원 입니다. | 모두의 연봉. 내 연봉은 어디쯤 되는지 확인해보세요. 900,000개 이상의 연봉정보를 확인할 수 있습니다. 본 사이트는 국민연금 가입자 내역을 토대로 데이터를 제공합니다.`}
         />
         <script
           type="application/ld+json"
@@ -116,75 +300,48 @@ export const CompanyPage = ({ item }) => {
       </div>
       <div className="container-wrap">
         <Typography.Title level={1}>{title}</Typography.Title>
-        <Table dataSource={info} columns={columns} pagination={false} />
-        {/* <List
-          header={<div>연도별 연봉 정보</div>}
-          bordered
-          dataSource={info}
-          renderItem={(item) => (
-            <List.Item>
-              <Typography.Text mark>[ITEM]</Typography.Text>{" "}
-              {item.totalEmployer}
-            </List.Item>
-          )}
-        /> */}
+        <List bordered style={{ marginBottom: 20 }}>
+          <List.Item key="address">
+            지번 주소: <strong>{address}</strong>
+          </List.Item>
+          <List.Item key="roadAddress">
+            도로명 주소: <strong>{roadAddress}</strong>
+          </List.Item>
+          <List.Item key="code">
+            업종코드: <strong>{code}</strong>
+          </List.Item>
+          <List.Item key="codeName">
+            업종코드명: <strong>{codeName}</strong>
+          </List.Item>
+        </List>
+        <Typography.Title level={2}>연봉정보(추정)</Typography.Title>
+        {newInfo.length && (
+          <Table
+            bordered
+            style={{ marginBottom: 20 }}
+            dataSource={newInfo}
+            columns={columns}
+            rowKey="index"
+            pagination={false}
+          />
+        )}
+        <Typography.Title level={2} className="mt-10">
+          평균월급(추정)
+        </Typography.Title>
+        {newInfo.length && <SalaryMonthLineChart data={newInfo} />}
+        <Typography.Title level={2} className="mt-10">
+          평균연봉(추정)
+        </Typography.Title>
+        {newInfo.length && <SalaryYearLineChart data={newInfo} />}
+        <Typography.Title level={2} className="mt-10">
+          직원 수
+        </Typography.Title>
+        {newInfo.length && <TotalLineChart data={newInfo} />}
+        <Typography.Title level={2} className="mt-10">
+          직원 이동 수
+        </Typography.Title>
+        {newInfo.length && <MoveEmployerColumnChart data={newInfo} />}
       </div>
-      {/* <Row className="pt-4 container-wrap">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          lg={{ span: 16 }}
-          className="px-4"
-        >
-          <Title>{getTitle(number)}</Title>
-          <Divider style={{ margin: "4px 0" }} />
-          <Paragraph className="text-right text-gray-400">{created}</Paragraph>
-          <p className="content-wrap">
-            {comments[0] !== undefined
-              ? comments[0].message
-              : "아직 등록되지 않은 번호 입니다. 첫 댓글이 내용으로 들어갑니다."}
-          </p>
-          <Divider style={{ margin: "8px 0" }} />
-          <Form.Item>
-            <div className="mb-2 text-xs">
-              <span className="mr-2">👉</span> 당신의 도움으로 큰 피해를 막을 수
-              있습니다.
-            </div>
-            <Input.Group compact>
-              <Input
-                style={{ width: "calc(100% - 80px)" }}
-                value={message}
-                status={isEmpty ? "error" : ""}
-                onChange={onChange}
-                placeholder="이 번호에 대해서 알려주세요."
-                onKeyDown={(e) => {
-                  handleSubmit(e);
-                }}
-              />
-              <Button
-                htmlType="submit"
-                loading={isLoading}
-                onClick={(e) => handleClickSubmit(e)}
-                type="primary"
-              >
-                등록
-              </Button>
-            </Input.Group>
-          </Form.Item>
-          {isComplete && <div className="ml-2">등록이 완료되었습니다.</div>}
-          {comments.map((item, index) => (
-            <Comments index={index} key={index} item={item} />
-          ))}
-        </Col>
-        <Col
-          className="px-4"
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          lg={{ span: 8 }}
-        >
-          <Recently number={number} />
-        </Col>
-      </Row> */}
     </>
   );
 };
