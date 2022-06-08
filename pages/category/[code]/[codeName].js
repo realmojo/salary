@@ -47,7 +47,7 @@ export const CategoryListPage = ({ code, codeName, items }) => {
         <meta property="og:title" />
         <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" />
-        <meta property="og:url" content="http://phonebookup.com" />
+        <meta property="og:url" content="http://salaryinfo.co.kr" />
         <meta
           property="og:image"
           content="https://salaryinfo.s3.ap-northeast-2.amazonaws.com/logo.png"
@@ -94,12 +94,9 @@ export default CategoryListPage;
 
 export const getServerSideProps = async ({ params }) => {
   const { code, codeName } = params;
-  console.log(code);
   const response = await axios.get(
     `${process.env.BASE_URL}/api/company/category?code=${code}`
   );
-
-  console.log(response.data);
 
   return { props: { code, codeName, items: response.data } };
 };

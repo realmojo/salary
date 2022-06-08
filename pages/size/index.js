@@ -7,30 +7,30 @@ import { Header } from "../../components/Header";
 
 const columns = [
   {
-    title: "업종코드",
-    dataIndex: "_id",
-    key: "_id",
-    render: (value) => {
+    title: "규모범위",
+    dataIndex: "min",
+    key: "min",
+    render: (_, { min, max }) => {
       return (
-        <Link href={`/category/${value.code}/${value.codeName}`}>
+        <Link href={`/size/${min}-${max}`}>
           <a>
-            <span className="cursor-pointer text-blue-400">{value.code}</span>
+            {min} ~ {max}
           </a>
         </Link>
       );
     },
   },
   {
-    title: "업종코드명",
-    dataIndex: "_id",
-    key: "_id",
+    title: "카운트",
+    dataIndex: "count",
+    key: "count",
     render: (value) => {
-      return <div>{value.codeName}</div>;
+      return <div>{value}</div>;
     },
   },
 ];
 
-export const CategoryPage = ({ items }) => {
+export const SizePage = ({ items }) => {
   const schemaData = {
     "@context": "http://schema.org",
     "@type": "Organization",
@@ -89,9 +89,7 @@ export const CategoryPage = ({ items }) => {
             style={{ marginBottom: 20 }}
             dataSource={items}
             columns={columns}
-            rowKey={(item) => {
-              return item._id.code;
-            }}
+            rowKey="_id"
             pagination={false}
           />
         )}
@@ -99,16 +97,10 @@ export const CategoryPage = ({ items }) => {
     </>
   );
 };
-export default CategoryPage;
+export default SizePage;
 
-export const getStaticProps = async () => {
-  const response = await axios.get(
-    `${process.env.BASE_URL}/api/company/category`
-  );
+export const getServerSideProps = async () => {
+  const response = await axios.get(`${process.env.BASE_URL}/api/company/size`);
 
-  const items = response.data.filter((item) => {
-    return item._id.code !== 0 && item._id.codeName !== "";
-  });
-
-  return { props: { items } };
+  return { props: { items: response.data } };
 };

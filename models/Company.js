@@ -12,6 +12,9 @@ const CompanySchema = new Schema({
   roadAddress: { type: String, default: "" },
   code: { type: Number, default: 0 },
   codeName: { type: String, default: "" },
+  totalEmployer: { type: Number, default: 0 },
+  monthSalary: { type: Number, default: 0 },
+  yearSalary: { type: Number, default: 0 },
   info: {
     type: Array,
     default: [],

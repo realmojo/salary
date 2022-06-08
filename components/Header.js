@@ -65,7 +65,19 @@ export const Header = () => {
                   marginBottom: 0,
                 }}
               >
-                업종별 회사
+                업종별
+              </Typography.Title>
+            </Link>
+            <Link href="/size">
+              <Typography.Title
+                level={5}
+                style={{
+                  cursor: "pointer",
+                  color: "white",
+                  marginBottom: 0,
+                }}
+              >
+                크기별
               </Typography.Title>
             </Link>
           </Space>

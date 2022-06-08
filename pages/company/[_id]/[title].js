@@ -204,7 +204,7 @@ const columns = [
     key: "monthSalary",
     render: (value) => (
       <div>
-        <strong>{addComma(value.toFixed(0))}</strong>
+        <strong>{addComma(value.toFixed(0))} 원</strong>
       </div>
     ),
   },
@@ -212,25 +212,25 @@ const columns = [
     title: "월 평균 연봉(예상)",
     dataIndex: "yearSalary",
     key: "yearSalary",
-    render: (value) => <div>{addComma(value.toFixed(0))}</div>,
+    render: (value) => <div>{addComma(value.toFixed(0))} 원</div>,
   },
   {
     title: "총 직원수",
     dataIndex: "totalEmployer",
     key: "totalEmployer",
-    render: (value) => <div>{addComma(value)}</div>,
+    render: (value) => <div>{addComma(value)} 명</div>,
   },
   {
     title: "입사 직원수",
     dataIndex: "joinEmployer",
     key: "joinEmployer",
-    render: (value) => <div>{addComma(value)}</div>,
+    render: (value) => <div>{addComma(value)} 명</div>,
   },
   {
     title: "퇴사 직원수",
     dataIndex: "leaveEmployer",
     key: "leaveEmployer",
-    render: (value) => <div>{addComma(value)}</div>,
+    render: (value) => <div>{addComma(value)} 명</div>,
   },
 ];
 
@@ -252,8 +252,8 @@ export const CompanyPage = ({ item }) => {
     "@context": "http://schema.org",
     "@type": "Organization",
     name: "모두의 연봉 - 내 연봉은 어디쯤?",
-    url: "http://www.salaryinfo.co.kr",
-    image: "https://phonebookup.s3.ap-northeast-2.amazonaws.com/logo.png",
+    url: "http://salaryinfo.co.kr",
+    image: "https://salaryinfo.s3.ap-northeast-2.amazonaws.com/logo.png",
     brand: "salary info",
     datePublished: "2022-05-15",
   };

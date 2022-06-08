@@ -13,7 +13,7 @@ const columns = [
     render: (value, { _id }) => {
       return (
         <Link href={`/company/${_id}/${encodeURI(value)}`}>
-          <strong className="cursor-pointer text-blue-400">{value}</strong>
+          <a>{value}</a>
         </Link>
       );
     },
@@ -47,7 +47,7 @@ export const CompanyPage = ({ title, items }) => {
         <meta property="og:title" />
         <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" />
-        <meta property="og:url" content="http://phonebookup.com" />
+        <meta property="og:url" content="http://salaryinfo.co.kr" />
         <meta
           property="og:image"
           content="https://salaryinfo.s3.ap-northeast-2.amazonaws.com/logo.png"
