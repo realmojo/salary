@@ -93,7 +93,7 @@ export const CategoryPage = ({ items }) => {
 };
 export default CategoryPage;
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const response = await axios.get(
     `${process.env.BASE_URL}/api/company/category`
   );
