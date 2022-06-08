@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import { Table, List, Typography } from "antd";
+import { Table, Pagination, Typography } from "antd";
 import { Header } from "../../components/Header";
+import { Adsense } from "../../components/Adsense";
 
 const columns = [
   {
@@ -21,7 +22,20 @@ const columns = [
   { title: "주소", dataIndex: "address", key: "address" },
 ];
 
-export const SizeRangePage = ({ title, items }) => {
+export const SizeRangePage = ({ title, list, total, baseUrl }) => {
+  const [items, setItems] = useState(list);
+  const [loading, setLoading] = useState(false);
+  const onChange = async (page) => {
+    setLoading(true);
+    const {
+      data: { items },
+    } = await axios.get(
+      `${baseUrl}/api/company/size?range=${title}&page=${page}`
+    );
+    setItems(items);
+    setLoading(false);
+  };
+
   const schemaData = {
     "@context": "http://schema.org",
     "@type": "Organization",
@@ -62,27 +76,28 @@ export const SizeRangePage = ({ title, items }) => {
         />
       </Head>
       <Header />
-      <div
-        style={{
-          width: 1024,
-          height: 300,
-          background: "#ddd",
-          margin: "20px auto",
-        }}
-      >
-        adsense
-      </div>
+      <Adsense />
       <div className="container-wrap">
-        <Typography.Title level={1}>[{title}]규모 회사 목록</Typography.Title>
+        <Typography.Title level={1}>[{title}] 규모 회사 목록</Typography.Title>
         {items.length && (
-          <Table
-            bordered
-            style={{ marginBottom: 20 }}
-            dataSource={items}
-            columns={columns}
-            rowKey="_id"
-            pagination={false}
-          />
+          <>
+            <Table
+              loading={loading}
+              bordered
+              style={{ marginBottom: 20 }}
+              dataSource={items}
+              columns={columns}
+              rowKey="_id"
+              pagination={false}
+            />
+            <Pagination
+              showQuickJumper
+              showSizeChanger={false}
+              defaultCurrent={1}
+              total={total}
+              onChange={onChange}
+            />
+          </>
         )}
       </div>
     </>
@@ -96,5 +111,12 @@ export const getServerSideProps = async ({ params }) => {
     `${process.env.BASE_URL}/api/company/size?range=${range}`
   );
 
-  return { props: { title: range, items: response.data } };
+  return {
+    props: {
+      baseUrl: process.env.BASE_URL,
+      title: range,
+      list: response.data.items,
+      total: response.data.total,
+    },
+  };
 };

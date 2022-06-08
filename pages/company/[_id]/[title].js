@@ -4,11 +4,8 @@ import axios from "axios";
 import { Table, List, Typography } from "antd";
 import { Line, Column } from "@ant-design/plots";
 import { Header } from "../../../components/Header";
-
-function addComma(num) {
-  var regexp = /\B(?=(\d{3})+(?!\d))/g;
-  return num.toString().replace(regexp, ",");
-}
+import { Adsense } from "../../../components/Adsense";
+import { addComma } from "../../../utils";
 
 const MoveEmployerColumnChart = ({ data }) => {
   if (data) {
@@ -288,16 +285,7 @@ export const CompanyPage = ({ item }) => {
         />
       </Head>
       <Header />
-      <div
-        style={{
-          width: 1024,
-          height: 300,
-          background: "#ddd",
-          margin: "20px auto",
-        }}
-      >
-        adsense
-      </div>
+      <Adsense />
       <div className="container-wrap">
         <Typography.Title level={1}>{title}</Typography.Title>
         <List bordered style={{ marginBottom: 20 }}>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { Table, Typography } from "antd";
 import { Header } from "../../../components/Header";
+import { Adsense } from "../../../components/Adsense";
 
 const columns = [
   {
@@ -62,16 +63,7 @@ export const CategoryListPage = ({ code, codeName, items }) => {
         />
       </Head>
       <Header />
-      <div
-        style={{
-          width: 1024,
-          height: 300,
-          background: "#ddd",
-          margin: "20px auto",
-        }}
-      >
-        adsense
-      </div>
+      <Adsense />
       <div className="container-wrap">
         <Typography.Title level={1}>
           {codeName}({code}) 목록

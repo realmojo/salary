@@ -1,11 +1,13 @@
 import { Header } from "../components/Header";
 import { Row, Col, Card, Skeleton, Typography } from "antd";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import moment from "moment";
 import "moment/locale/ko";
 import Link from "next/link";
 import Head from "next/head";
+import { addComma } from "../utils";
+import { Adsense } from "../components/Adsense";
 
 const SkeletonComponent = () => {
   return (
@@ -33,33 +35,32 @@ const ItemsComponent = ({ items }) => {
           className="mb-4"
           xs={{ span: 24 }}
           sm={{ span: 12 }}
-          lg={{ span: 8 }}
+          lg={{ span: 6 }}
         >
           <Card
             type="inner"
-            title={<Link href={`/number/${item.number}`}>{item.number}</Link>}
+            title={
+              <Link href={`/company/${item._id}/${item.title}`}>
+                <a>{item.title}</a>
+              </Link>
+            }
           >
-            <p>ddd</p>
-            {/* <span style={{ fontSize: 12, color: "#bbb" }}>
-              {moment(item.created).fromNow()}
-            </span> */}
-            {/* <span style={{ fontSize: 12, color: "#bbb" }}>
-              ({convertIP(item.ip)})
-            </span> */}
+            <div className="text-gray-400 text-xs">
+              직원 수: {addComma(item.totalEmployer)} 명
+            </div>
+            <Typography.Title
+              level={3}
+              style={{ marginBottom: 0, marginTop: 0 }}
+            >
+              {addComma(item.yearSalary)} 원
+            </Typography.Title>
           </Card>
         </Col>
       ))}
     </>
   );
 };
-const Home = () => {
-  const [items, setItems] = useState([]);
-
-  // useEffect(() => {
-  //   axios.get(`/api/phone/comments/recently`).then((res) => {
-  //     setItems(res.data.recentlyItems || []);
-  //   });
-  // }, []);
+const Home = ({ items, techItems }) => {
   return (
     <>
       <Head>
@@ -75,26 +76,26 @@ const Home = () => {
         />
       </Head>
       <Header />
-      <div
-        style={{
-          width: 1024,
-          height: 300,
-          background: "#ddd",
-          margin: "20px auto",
-        }}
-      >
-        adsense
-      </div>
-      <div className="container-wrap" style={{ paddingTop: 20 }}>
-        <Typography.Title>
-          {moment().format("YYYY")}년 {moment().format("MM")}월 연봉 TOP 10
-        </Typography.Title>
-      </div>
+      <Adsense />
       <Row gutter={16} className="pt-4 container-wrap">
         {items.length === 0 ? (
           <SkeletonComponent />
         ) : (
-          <ItemsComponent items={items} />
+          <>
+            <div className="container-wrap px-2">
+              <Typography.Title>
+                {moment().format("YYYY")}년 {moment().format("MM")}월 연봉 TOP
+                100
+              </Typography.Title>
+            </div>
+            <ItemsComponent items={items} />
+            <div className="container-wrap px-2">
+              <Typography.Title level={2}>
+                주요 IT Tech 기업 연봉
+              </Typography.Title>
+            </div>
+            <ItemsComponent items={techItems} />
+          </>
         )}
       </Row>
     </>
@@ -102,3 +103,10 @@ const Home = () => {
 };
 
 export default Home;
+
+export const getServerSideProps = async () => {
+  const top100 = await axios.get(`${process.env.BASE_URL}/api/company/top100`);
+  const tech9 = await axios.get(`${process.env.BASE_URL}/api/company/tech9`);
+
+  return { props: { items: top100.data, techItems: tech9.data } };
+};

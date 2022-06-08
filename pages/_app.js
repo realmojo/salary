@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-// import axios from "axios";
 import Head from "next/head";
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
@@ -7,8 +6,21 @@ import "antd/dist/antd.css";
 import NextNProgress from "nextjs-progressbar";
 import { Layout } from "antd";
 const { Footer } = Layout;
+import { useRouter } from "next/router";
+import * as gtag from "../lib/gtag";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+
   const schemaData = {
     "@context": "http://schema.org",
     "@type": "Organization",

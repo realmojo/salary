@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { Table, Typography } from "antd";
 import { Header } from "../../components/Header";
+import { Adsense } from "../../components/Adsense";
 
 const columns = [
   {
@@ -71,16 +72,7 @@ export const CategoryPage = ({ items }) => {
         />
       </Head>
       <Header />
-      <div
-        style={{
-          width: 1024,
-          height: 300,
-          background: "#ddd",
-          margin: "20px auto",
-        }}
-      >
-        adsense
-      </div>
+      <Adsense />
       <div className="container-wrap">
         <Typography.Title level={1}>업종코드 목록</Typography.Title>
         {items.length && (
@@ -90,7 +82,7 @@ export const CategoryPage = ({ items }) => {
             dataSource={items}
             columns={columns}
             rowKey={(item) => {
-              return item._id.code;
+              return `${item._id.code}-${item._id.codeName}`;
             }}
             pagination={false}
           />
