@@ -13,7 +13,6 @@ const handler = async (req, res) => {
         const skip = page ? Number(page) - 1 : 0;
         const offset = skip * limit;
         const [min, max] = range.split("-");
-        console.log(limit, skip, offset);
         const { count: total } = await CompanySize.findOne({
           min: Number(min),
           max: Number(max),
