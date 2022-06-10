@@ -13,7 +13,7 @@ const columns = [
     key: "min",
     render: (_, { min, max }) => {
       return (
-        <Link href={`/size/${min}-${max}`}>
+        <Link href={`https://salaryinfo.co.kr/size/${min}-${max}`}>
           <a>
             {min} ~ {max}
           </a>
