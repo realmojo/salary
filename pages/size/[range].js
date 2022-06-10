@@ -108,7 +108,7 @@ export default SizeRangePage;
 export const getServerSideProps = async ({ params }) => {
   const { range } = params;
   const response = await axios.get(
-    `${process.env.BASE_URL}/api/company/size?range=${range}`
+    `${process.env.BASE_URL}/api/company/size?range=${range}&page=1`
   );
 
   return {
