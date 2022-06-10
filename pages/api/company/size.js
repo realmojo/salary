@@ -10,7 +10,7 @@ const handler = async (req, res) => {
     case "GET":
       if (range) {
         const limit = 10;
-        const skip = page ? Number(page) - 1 : 0;
+        const skip = !isNaN(page) ? Number(page) - 1 : 0;
         const offset = skip * limit;
         const [min, max] = range.split("-");
         const { count: total } = await CompanySize.findOne({
