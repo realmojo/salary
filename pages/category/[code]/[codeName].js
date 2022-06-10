@@ -14,7 +14,7 @@ const columns = [
     render: (value, { _id }) => {
       return (
         <Link href={`/company/${_id}/${encodeURI(value)}`}>
-          <strong className="cursor-pointer text-blue-400">{value}</strong>
+          <a>{value}</a>
         </Link>
       );
     },

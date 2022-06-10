@@ -193,8 +193,8 @@ const SalaryYearLineChart = ({ data }) => {
 };
 
 const columns = [
-  { title: "연도", dataIndex: "year", key: "year" },
-  { title: "월", dataIndex: "month", key: "month" },
+  { title: "연도", dataIndex: "year", key: "year", width: "60px", fixed: true },
+  { title: "월", dataIndex: "month", key: "month", width: "40px", fixed: true },
   {
     title: "월 평균 급여(예상)",
     dataIndex: "monthSalary",
@@ -305,13 +305,17 @@ export const CompanyPage = ({ item }) => {
         <Typography.Title level={2}>연봉정보(추정)</Typography.Title>
         {newInfo.length && (
           <Table
-            bordered
             style={{ marginBottom: 20 }}
             size="small"
             dataSource={newInfo}
             columns={columns}
             rowKey="index"
             pagination={false}
+            scroll={{
+              x: 800,
+              y: 500,
+            }}
+            bordered
           />
         )}
         <Typography.Title level={2} className="mt-10">

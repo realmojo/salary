@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { PageHeader, Input, Space, Avatar, Button, Typography } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { PageHeader, Input, Button, Popover, Typography, Divider } from "antd";
+import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 
 const suffix = (
   <SearchOutlined
@@ -12,9 +12,58 @@ const suffix = (
     }}
   />
 );
+
+const Menu = ({ color }) => (
+  <div style={{ display: color === "white" ? "flex" : "block", width: 100 }}>
+    <Link href="/category">
+      <Typography.Title
+        level={5}
+        style={{
+          cursor: "pointer",
+          color: color,
+          marginTop: 0,
+          marginBottom: 0,
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+          marginRight: color === "white" ? 8 : 0,
+        }}
+      >
+        업종별
+      </Typography.Title>
+    </Link>
+    {color === "black" ? <Divider style={{ margin: "8px 0" }} /> : ""}
+    <Link href="/size">
+      <Typography.Title
+        level={5}
+        style={{
+          cursor: "pointer",
+          color: color,
+          marginTop: 0,
+          marginBottom: 0,
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        크기별
+      </Typography.Title>
+    </Link>
+  </div>
+);
+
 export const Header = () => {
+  const [visible, setVisible] = useState(false);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
+
+  const hide = () => {
+    setVisible(false);
+  };
+
+  const handleVisibleChange = (newVisible) => {
+    setVisible(newVisible);
+  };
 
   const onSearch = () => {
     router.push(`/list/${searchText}`);
@@ -28,25 +77,26 @@ export const Header = () => {
   return (
     <>
       <PageHeader
-        style={{ background: "#1890ff" }}
-        className="site-page-header"
+        className="salary-header"
         title={
-          <Space>
-            <Link href="/">
-              <Typography.Title
-                level={2}
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                  marginBottom: 0,
-                  marginRight: 20,
-                }}
-              >
-                모두의 연봉
-              </Typography.Title>
-            </Link>
+          <div style={{ display: "flex" }}>
+            <div className="hidden md:block">
+              <Link href="/">
+                <Typography.Title
+                  level={2}
+                  style={{
+                    cursor: "pointer",
+                    color: "white",
+                    marginBottom: 0,
+                    marginRight: 20,
+                  }}
+                >
+                  모두의 연봉
+                </Typography.Title>
+              </Link>
+            </div>
 
-            <Input.Group compact style={{ minWidth: "400px" }}>
+            <Input.Group compact style={{ marginRight: 20, width: 600 }}>
               <Input
                 size="large"
                 value={searchText}
@@ -56,31 +106,21 @@ export const Header = () => {
                 suffix={suffix}
               />
             </Input.Group>
-            <Link href="/category">
-              <Typography.Title
-                level={5}
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                  marginBottom: 0,
-                }}
+            <div className="hidden md:flex">
+              <Menu color="white" />
+            </div>
+            <div className="md:hidden">
+              <Popover
+                content={<Menu color="black" />}
+                trigger="click"
+                visible={visible}
+                onVisibleChange={handleVisibleChange}
+                placement="bottomRight"
               >
-                업종별
-              </Typography.Title>
-            </Link>
-            <Link href="/size">
-              <Typography.Title
-                level={5}
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                  marginBottom: 0,
-                }}
-              >
-                크기별
-              </Typography.Title>
-            </Link>
-          </Space>
+                <Button type="primary" icon={<MenuOutlined />} />
+              </Popover>
+            </div>
+          </div>
         }
       />
     </>

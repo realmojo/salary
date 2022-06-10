@@ -20,7 +20,7 @@ const handler = async (req, res) => {
         const items = await Company.find({
           totalEmployer: { $gte: min, $lt: max },
         })
-          .sort({ totalEmployer: 1, monthSalary: 1 })
+          .sort({ totalEmployer: 1, title: 1 })
           .skip(offset)
           .limit(limit);
 

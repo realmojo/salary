@@ -11,16 +11,7 @@ export const Adsense = () => {
   return (
     <div>
       {process.env.NODE_ENV === "development" ? (
-        <div
-          style={{
-            width: 1024,
-            height: 300,
-            background: "#ddd",
-            margin: "20px auto",
-          }}
-        >
-          adsense
-        </div>
+        <div className="adsense-component">adsense</div>
       ) : (
         <ins
           className="adsbygoogle"

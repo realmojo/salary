@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }) {
       <Component {...pageProps} />
       <Footer className="mt-10 w-full text-center bottom-0">
         <div className="text-gray-400 text-xs mb-1">
-          copyrightⓒ 2017 All rights reserved by{" "}
+          copyrightⓒ 2015 All rights reserved by{" "}
           <strong>salaryinfo.co.kr</strong>
         </div>
         <div className="text-gray-400 text-xs">
